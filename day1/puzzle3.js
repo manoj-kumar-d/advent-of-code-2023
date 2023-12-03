@@ -5,18 +5,6 @@ fs.readFile('test.txt', (err, data) => {
     const input = data.toString();
     const inputArray = input.split(os.EOL);
 
-    const wordsMap = {
-        'one': 1,
-        'two': 2,
-        'three': 3,
-        'four': 4,
-        'five':5,
-        'six':6,
-        'seven':7,
-        'eight':8,
-        'nine':9
-    };
-
     const  resultTwo = inputArray
         .map(inputString => {
             const newVar = [...inputString];
