@@ -2,16 +2,16 @@ const fs = require('fs');
 const os = require('os');
 
 const cards = {
-    "2": 1,
-    "3": 2,
-    "4": 3 ,
-    "5": 4,
-    "6": 5,
-    "7": 6,
-    "8": 7,
-    "9": 8,
-    "T": 9,
-    "J": 10,
+    "J": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4 ,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "T": 10,
     "Q": 11,
     "K": 12,
     "A": 13
@@ -41,25 +41,56 @@ const getType = cardsString => {
     if (uniqueCards === 1) {
         type = "FIVE_OF_A_KIND";
     } else if (uniqueCards === 2) {
-        const x = cardsMap[Object.keys(cardsMap)[0]].length;
-        if (x === 4 || x === 1) {
-            type = "FOUR_OF_A_KIND";
+        if (Object.keys(cardsMap).some(x => x === 'J')) {
+            type = "FIVE_OF_A_KIND";
         } else {
-            type = "FULL_HOUSE";
+            const x = cardsMap[Object.keys(cardsMap)[0]].length;
+            if (x === 4 || x === 1) {
+                type = "FOUR_OF_A_KIND";
+            } else {
+                type = "FULL_HOUSE";
+            }
         }
     } else if (uniqueCards === 3) {
-        const x = cardsMap[Object.keys(cardsMap)[0]].length;
-        const y = cardsMap[Object.keys(cardsMap)[1]].length;
-        const z = cardsMap[Object.keys(cardsMap)[2]].length;
-        if (x === 3 || y === 3 || z === 3) {
-            type = "THREE_OF_A_KIND"
+        const cardOne = Object.keys(cardsMap)[0];
+        const cardTwo = Object.keys(cardsMap)[1];
+        const cardThree = Object.keys(cardsMap)[2];
+
+        const x = cardsMap[cardOne].length;
+        const y = cardsMap[cardTwo].length;
+        const z = cardsMap[cardThree].length;
+        if (Object.keys(cardsMap).some(x => x === 'J')) {
+            const noOfJokers = cardsMap['J'].length;
+            if (noOfJokers === 3) {
+                type = "FOUR_OF_A_KIND";
+            } else if (noOfJokers === 2) {
+                type = "FOUR_OF_A_KIND";
+            } else if (noOfJokers === 1) {
+                if (x === 2 || y === 2 || z === 2) {
+                    type = "FULL_HOUSE";
+                } else {
+                    type = "FOUR_OF_A_KIND";
+                }
+            }
         } else {
-            type = "TWO_PAIR"
+            if (x === 3 || y === 3 || z === 3) {
+                type = "THREE_OF_A_KIND"
+            } else {
+                type = "TWO_PAIR"
+            }
         }
     } else if (uniqueCards === 4) {
-        type = "ONE_PAIR"
+        if (Object.keys(cardsMap).some(x => x === 'J')) {
+            type = "THREE_OF_A_KIND"
+        } else {
+            type = "ONE_PAIR"
+        }
     } else {
-        type = "HIGH_CARD"
+        if (Object.keys(cardsMap).some(x => x === 'J')) {
+            type = "ONE_PAIR"
+        } else {
+            type = "HIGH_CARD"
+        }
     }
 
     return type;
@@ -104,6 +135,6 @@ fs.readFile('input.txt', (err, data) => {
 
     });
 
-    //part 1 - 255048101
+    //part 2 - 253718286
     console.log(rankedArray.map((obj, index) => obj.bid * (index+1)).reduce((acc, curr) => acc + curr, 0));
 });
