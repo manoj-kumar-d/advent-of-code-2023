@@ -30,6 +30,9 @@ fs.readFile('input.txt', (err, data) => {
                 position = mapObjects[position['right']];
             }
             stepCount++;
+            if (position === mapObjects['ZZZ']) {
+                break;
+            }
         }
         if (position === mapObjects['ZZZ']) {
             break;
